@@ -1,8 +1,17 @@
 'use strict';
+const MAX_ENEMY = 8;
+
 const score = document.querySelector('.score'),
   start = document.querySelector('.start'),
   gameArea = document.querySelector('.gameArea'),
   car = document.createElement('div');
+
+// const music = document.createElement('embed');
+// music.src = 'audio.mp3';
+// music.classList.add('visually-hidden')
+
+const music = new Audio('audio.mp3');
+
 
 
 car.classList.add('car');
@@ -18,7 +27,7 @@ const setting = {
   start: false,
   score: 0,
   speed: 3,
-  traffic: 2.5,
+  traffic: 2,
 };
 
 const playGame = () => {
@@ -48,9 +57,13 @@ const getQuantityELements = (heightElement) => {
   return document.documentElement.clientHeight / heightElement;
 };
 
+const getRandomEnemy = max => Math.floor(Math.random() * max) + 1;
 
 const startGame = () => {
   start.classList.add('hide');
+  music.play();
+  // document.body.append(music);
+  gameArea.style.minHeight = 100 + 'vh';
 
   for (let i = 0; i < getQuantityELements(100); i++) {
     const line = document.createElement('div');
@@ -66,8 +79,11 @@ const startGame = () => {
     enemy.y = -100 * setting.traffic * (i + 1);
     enemy.style.left = Math.round((Math.random() * (gameArea.offsetWidth - 50))) + 'px';
     enemy.style.top = enemy.y + 'px';
+    enemy.style.background = `transparent
+    url(./img/enemy${getRandomEnemy(MAX_ENEMY)}.png)
+    center / cover
+    no-repeat`;
     gameArea.appendChild(enemy);
-    enemy.style.background = "transparent url(./img/newEnemy.png)  center / cover no-repeat";
   }
 
   setting.start = true;
@@ -101,18 +117,26 @@ function moveEnemy() {
     if (item.y >= document.documentElement.clientHeight) {
       item.y = -100 * setting.traffic;
       item.style.left = Math.round((Math.random() * (gameArea.offsetWidth - 50))) + 'px';
+      item.style.background = `transparent
+      url(./img/enemy${getRandomEnemy(MAX_ENEMY)}.png)
+      center / cover
+      no-repeat`;
     }
   });
 }
 
 const startRun = (e) => {
+  if (keys.hasOwnProperty(e.key)) {
   e.preventDefault();
   keys[e.key] = true;
+  }
 };
 
 const stopRun = (e) => {
+  if (keys.hasOwnProperty(e.key)) {
   e.preventDefault();
   keys[e.key] = false;
+  }
 };
 
 start.addEventListener('click', startGame);

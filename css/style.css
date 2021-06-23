@@ -61,7 +61,6 @@ body {
 
 .gameArea {
   width: 300px;
-  height: 100%;
   position: relative;
   margin: auto;
   background-color: #222;
@@ -74,3 +73,14 @@ body {
   background-color: #fff;
   left: 145px;
 }
+/*
+.visually-hidden {
+  position: absolute !important;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 0 !important;
+  border: 0 !important;
+  height: 1px !important;
+  width: 1px !important;
+  overflow: hidden;
+} */
