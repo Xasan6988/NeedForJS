@@ -1,5 +1,6 @@
 'use strict';
 const MAX_ENEMY = 8;
+const HEIGHT_ELEM = 100;
 
 const score = document.querySelector('.score'),
   start = document.querySelector('.start'),
@@ -54,36 +55,37 @@ const playGame = () => {
 };
 
 const getQuantityELements = (heightElement) => {
-  return document.documentElement.clientHeight / heightElement;
+  return (gameArea.offsetHeight / heightElement);
 };
 
 const getRandomEnemy = max => Math.floor(Math.random() * max) + 1;
 
 const startGame = () => {
   start.classList.add('hide');
-  music.play();
+  // music.play();
   // document.body.append(music);
   gameArea.innerHTML = '';
 
   for (let i = 0; i < getQuantityELements(100); i++) {
     const line = document.createElement('div');
     line.classList.add('line');
-    line.style.top = (i*100) + 'px';
+    line.style.top = (i * HEIGHT_ELEM) + 'px';
+    line.style.height = (HEIGHT_ELEM / 2) + 'px';
     line.y = i * 100;
     gameArea.append(line);
   }
 
-  for (let i = 0; i < getQuantityELements(100 * setting.traffic); i++) {
+  for (let i = 0; i < getQuantityELements(HEIGHT_ELEM * setting.traffic); i++) {
     const enemy = document.createElement('div');
     enemy.classList.add('enemy');
-    enemy.y = -100 * setting.traffic * (i + 1);
+    enemy.y = -HEIGHT_ELEM * setting.traffic * (i + 1);
     enemy.style.left = Math.round((Math.random() * (gameArea.offsetWidth - 50))) + 'px';
     enemy.style.top = enemy.y + 'px';
     enemy.style.background = `transparent
     url(./img/enemy${getRandomEnemy(MAX_ENEMY)}.png)
-    center / cover
+    center / contain
     no-repeat`;
-    gameArea.appendChild(enemy);
+    gameArea.append(enemy);
   }
 
   setting.score = 0;
@@ -104,7 +106,7 @@ function moveRoad() {
     line.y += setting.speed;
     line.style.top = line.y + 'px';
 
-    if (line.y >= document.documentElement.clientHeight) {
+    if (line.y >= gameArea.offsetHeight) {
       line.y = -50;
     }
 
@@ -138,8 +140,8 @@ function moveEnemy() {
     item.y += setting.speed / 2;
     item.style.top = item.y + 'px';
 
-    if (item.y >= document.documentElement.clientHeight) {
-      item.y = -100 * setting.traffic;
+    if (item.y >= gameArea.offsetHeight) {
+      item.y = -HEIGHT_ELEM * setting.traffic;
       item.style.left = Math.round((Math.random() * (gameArea.offsetWidth - 50))) + 'px';
       item.style.background = `transparent
       url(./img/enemy${getRandomEnemy(MAX_ENEMY)}.png)
