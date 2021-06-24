@@ -12,8 +12,6 @@ const score = document.querySelector('.score'),
 
 const music = new Audio('audio.mp3');
 
-
-
 car.classList.add('car');
 
 const keys = {
@@ -32,6 +30,8 @@ const setting = {
 
 const playGame = () => {
   if (setting.start) {
+    setting.score += setting.speed;
+    score.innerHTML = 'SCORE:<br>' + setting.score;
     moveRoad();
     moveEnemy();
 
@@ -63,7 +63,7 @@ const startGame = () => {
   start.classList.add('hide');
   music.play();
   // document.body.append(music);
-  gameArea.style.minHeight = 100 + 'vh';
+  gameArea.innerHTML = '';
 
   for (let i = 0; i < getQuantityELements(100); i++) {
     const line = document.createElement('div');
@@ -86,8 +86,12 @@ const startGame = () => {
     gameArea.appendChild(enemy);
   }
 
+  setting.score = 0;
   setting.start = true;
   gameArea.appendChild(car);
+  car.style.left = gameArea.offsetWidth / 2 - car.offsetWidth / 2;
+  car.style.top = 'auto';
+  car.style.bottom = '0px';
   setting.x = car.offsetLeft;
   setting.y = car.offsetTop;
   requestAnimationFrame(playGame);
@@ -111,6 +115,26 @@ function moveEnemy() {
   let enemy = document.querySelectorAll('.enemy');
 
   enemy.forEach(item => {
+    let carRect = car.getBoundingClientRect();
+    let enemyRect = item.getBoundingClientRect();
+    if (carRect.top <= enemyRect.bottom &&
+        carRect.right >= enemyRect.left &&
+        carRect.left <= enemyRect.right &&
+        carRect.bottom >= enemyRect.top) {
+      setting.start = false;
+      music.pause();
+      let localScore = localStorage.getItem('score');
+      if (!localScore) {
+        localStorage.setItem('score', setting.score);
+      } else if (localScore < setting.score) {
+        score.textContent = `Вы установили новый рекорд!\n
+        Ваш счёт: ${setting.score}`;
+        localStorage.setItem('score', setting.score);
+      }
+
+      start.classList.remove('hide');
+      start.style.top = score.offsetHeight;
+    }
     item.y += setting.speed / 2;
     item.style.top = item.y + 'px';
 
@@ -139,7 +163,13 @@ const stopRun = (e) => {
   }
 };
 
-start.addEventListener('click', startGame);
+start.addEventListener('click', e => {
+  if (e.target.matches('.difficul-btn')) {
+    setting.speed = +e.target.dataset.speed;
+    setting.traffic = +e.target.dataset.traffic;
+    startGame();
+  }
+});
 
 document.addEventListener('keydown', startRun);
 document.addEventListener('keyup', stopRun);
