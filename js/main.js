@@ -62,7 +62,7 @@ const getRandomEnemy = max => Math.floor(Math.random() * max) + 1;
 
 const startGame = () => {
   start.classList.add('hide');
-  // music.play();
+  music.play();
   // document.body.append(music);
   gameArea.innerHTML = '';
 

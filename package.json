@@ -1,0 +1,23 @@
+{
+  "name": "nfjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Xasan6988/NeedForJS.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Xasan6988/NeedForJS/issues"
+  },
+  "homepage": "https://github.com/Xasan6988/NeedForJS#readme",
+  "devDependencies": {
+    "electron": "^13.1.4",
+    "electron-packager": "^15.2.0"
+  }
+}
